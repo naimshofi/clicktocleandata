@@ -142,6 +142,13 @@ def upload_data_page():
     col1, col2 = st.columns([2, 1])
     
     with col1:
+
+        custom_sep = st.text_input(
+            "Custom separator (optional, e.g. ',' or ';' or '|')",
+            value=",",
+            help="Default is comma. Enter another separator if your file uses a different one."
+        )
+        
         st.subheader('Upload your file')
 
         uploaded_file = st.file_uploader(
@@ -156,7 +163,7 @@ def upload_data_page():
                 file_ext = uploaded_file.name.split('.')[-1].lower()
                 
                 if file_ext == 'csv':
-                    df = pd.read_csv(uploaded_file)
+                    df = pd.read_csv(uploaded_file,sep=custom_sep)
                 elif file_ext in ['xlsx', 'xls']:
                     df = pd.read_excel(uploaded_file)
                 elif file_ext == 'json':
@@ -187,7 +194,7 @@ def upload_data_page():
         if upl_btn and data_url:
             try:
                 if data_url.endswith('.csv'):
-                    df = pd.read_csv(data_url)
+                    df = pd.read_csv(data_url,sep=custom_sep)
                 elif data_url.endswith(('.xlsx', '.xls')):
                     df = pd.read_excel(data_url)
                 elif data_url.endswith('.json'):
@@ -998,4 +1005,5 @@ def export_data_page():
 
 # Run the app
 if __name__ == "__main__":
+
     main()
